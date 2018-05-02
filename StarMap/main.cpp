@@ -6,6 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
+#define VERBOSE false
 #include <iostream>
 #include <math.h>
 #include "Point2D.h"
@@ -28,8 +29,6 @@ int top_level_error ( const char * const msg ) {
 
 int main(int argc, const char * argv[]) {
     try {
-        cout << exec("pwd") << endl;
-        cout << exec("whoami") << endl;
         TikzFigure t = TikzFigure();
         t.write();
         t.render();

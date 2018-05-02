@@ -16,14 +16,23 @@ private:
     double reference_scale;
     bool celestial;
 public:
-    Projection(): center_longitude{0.0}, reference_scale{1.0}, celestial{false} {
+    Projection():
+        center_longitude{0.0}, reference_scale{1.0}, celestial{false} {
+    #if VERBOSE
         std::cout << "Created Projection()" << std::endl;
+    #endif
     }
     Projection(double p_center_longitude, double p_reference_scale, bool p_celestial):
         center_longitude{p_center_longitude}, reference_scale{p_reference_scale}, celestial{p_celestial} {
+    #if VERBOSE
         std::cout << "Created Projection(double, double, bool)" << std::endl;
+    #endif
     }
-    virtual ~Projection() { std::cout << "Destroyed Projection" << std::endl; }
+    virtual ~Projection() {
+    #if VERBOSE
+        std::cout << "Destroyed Projection" << std::endl;
+    #endif
+    }
 
     double get_center_longitude() const { return center_longitude; }
     double get_reference_scale() const { return reference_scale; }

@@ -13,6 +13,7 @@
 #include "Point2D.h"
 #include "Projection.h"
 
+
 class EquidistantConicProjection: public Projection {
 private:
     double center_latitude;
@@ -26,7 +27,9 @@ public:
     EquidistantConicProjection():
         EquidistantConicProjection(SphericalPoint(0, 0), 30, 60, 45, false)
     {
+#if VERBOSE
         std::cout << "Created EquidistantConicProjection()" << std::endl;
+#endif
     }
     
     EquidistantConicProjection(SphericalPoint p_center, double p_standard_parallel1, double p_standard_parallel2, double p_reference_scale, bool p_celestial):
@@ -38,11 +41,15 @@ public:
         n = (cos(phi1) - cos(phi2)) / (phi2 - phi1);
         G = cos(phi1) / n + phi1;
         rho_0 = (G - deg2rad(center_latitude))/deg2rad(get_reference_scale());
+#if VERBOSE
         std::cout << "Created EquidistantConicProjection(SphericalPoint, double, double, double, bool)" << std::endl;
+#endif
     }
         
     virtual ~EquidistantConicProjection() {
+#if VERBOSE
         std::cout << "Destroyed EquidistantConicProjection" << std::endl;
+#endif
     }
 
     SphericalPoint get_center() const { return SphericalPoint(get_center_longitude(), center_latitude); }

@@ -17,15 +17,21 @@ public:
     UnitProjection():
         Projection()
     {
+#if VERBOSE
         std::cout << "Created UnitProjection()" << std::endl;
+#endif
     }
     UnitProjection(double p_center_longitude, double p_reference_scale, bool p_celestial):
         Projection(p_center_longitude, p_reference_scale, p_celestial)
     {
+#if VERBOSE
         std::cout << "Created UnitProjection(double, double, bool)" << std::endl;
+#endif
     };
     virtual ~UnitProjection() {
+#if VERBOSE
         std::cout << "Destroyed UnitProjection" << std::endl;
+#endif
     }
     
     virtual Point2D project(SphericalPoint &sp) const {

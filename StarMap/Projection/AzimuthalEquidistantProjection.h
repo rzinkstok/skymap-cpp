@@ -21,18 +21,24 @@ public:
         Projection(), north(true)
     {
         origin_latitude = (north ? 90 : -90);
+#if VERBOSE
         std::cout << "Created AzimuthalEquidistantProjection()" << std::endl;
+#endif
     }
     
     AzimuthalEquidistantProjection(double p_center_longitude, double p_reference_scale, bool p_celestial, bool p_north):
         Projection(p_center_longitude, p_reference_scale, p_celestial), north(p_north)
     {
         origin_latitude = (north ? 90 : -90);
+#if VERBOSE
         std::cout << "Created AzimuthalEquidistantProjection(double, double, bool, bool)" << std::endl;
+#endif
     }
     
     virtual ~AzimuthalEquidistantProjection() {
+#if VERBOSE
         std::cout << "Destroyed AzimuthalEquidistantProjection" << std::endl;
+#endif
     }
     
     bool get_north() const { return north; }
