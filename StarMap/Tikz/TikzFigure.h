@@ -12,10 +12,36 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <map>
 using namespace std;
 
-string exec(const char* cmd);
+// Declarations
+string exec(const char*);
+string point2coordinates(Point2D&);
+
+
+
 const string texbin= "/Library/TeX/texbin/";
+
+class PaperSize {
+public:
+    double width;
+    double height;
+    PaperSize(): width(0), height(0) {};
+    PaperSize(double p_width, double p_height): width(p_width), height(p_height) {}
+    ~PaperSize() {};
+};
+
+
+
+map<string, PaperSize> get_papersizes() {
+    map<string, PaperSize> ps;
+    ps["A2"] = PaperSize(420.0, 594.0);
+    ps["A3"] = PaperSize(297.0, 420.0);
+    ps["A4"] = PaperSize(210.0, 297.0);
+    return ps;
+}
+
 
 
 class TikzFigure {
@@ -26,18 +52,15 @@ public:
     ofstream texfile;
     bool landscape;
     int fontsize;
-    double paperwidth;
-    double paperheight;
+    PaperSize papersize;
     
-    TikzFigure():
-        basedir{"/Users/rzinkstok/temp/tikz/"},
-        landscape{true},
-        fontsize{11},
-        paperwidth{297},
-        paperheight{210}
+    TikzFigure(): TikzFigure("/Users/rzinkstok/temp/tikz/", "test", "A4", true) {}
+    TikzFigure(string p_basedir, string p_name, string p_papersize, bool p_landscape):
+        basedir{p_basedir}, name{p_name}, landscape{landscape}
     {
-        name = "test";
         path = basedir + name + ".tex";
+        map<string, PaperSize> papersizes = get_papersizes();
+        papersize = papersizes[p_papersize];
     }
     TikzFigure(const TikzFigure &other) {}
     ~TikzFigure() {}
@@ -47,7 +70,7 @@ public:
     }
     
     void open() {
-        cout << "Opening file" << path << endl;
+        cout << "Opening file " << path << endl;
         texfile.open(path);
         if (texfile.is_open()) {
             cout << "File opened correctly" << endl;
@@ -68,7 +91,7 @@ public:
             texfile << "landscape,";
         }
         texfile << fontsize << "pt]{{article}}" << endl;
-        texfile << "\\usepackage[paperwidth=" << paperwidth << "mm,paperheight=" << paperheight << "mm]{{geometry}}" << endl;
+        texfile << "\\usepackage[paperwidth=" << papersize.width << "mm,paperheight=" << papersize.height << "mm]{{geometry}}" << endl;
         texfile << "\\usepackage{mathspec}" << endl;
         texfile << "\\usepackage{tikz}" << endl;
         texfile << "\\usetikzlibrary{positioning}" << endl;
