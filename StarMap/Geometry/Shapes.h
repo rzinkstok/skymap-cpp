@@ -10,7 +10,9 @@
 #define Shapes_h
 #include <math.h>
 #include <stdio.h>
-
+#include <vector>
+#include <exception>
+using namespace std;
 
 class Shape {
 public:
@@ -46,7 +48,7 @@ public:
         
         double den = (a1 * b2 - a2 * b1);
         if(abs(den) == 0.0) {
-            throw "Zero denominator";
+            throw runtime_error("Parallel lines do not intersect");
         }
         
         Point2D result = Point2D();
@@ -61,23 +63,70 @@ public:
         if(point_on_line_segment(p) && other.point_on_line_segment(p)) {
             return p;
         }
-        throw "Point not on line";
+        throw runtime_error("Intersection not within line segment(s)");
     }
     
     bool point_on_line_segment(Point2D p) const {
         Point2D point_vector = p - point1;
-        double ip = point1 * point_vector;
-        double comp = ip/length;
-        return (comp >= 0) && (comp <= length);
+        double component = (vector * point_vector)/length;
+        return (abs(point_vector.magnitude() - component) < EPSILON) && (component >= 0) && (component <= length);
     }
 };
 
-inline std::ostream& operator<<(std::ostream& os, const Line& l)
+inline ostream& operator<<(ostream& os, const Line& l)
 {
     os << "Line(" << l.point1 << " - " << l.point2 << ")";
     return os;
 }
 
+
+class Polygon: public Shape {
+public:
+    vector<Point2D> points;
+    vector<Line> lines;
+    bool closed;
+    
+    Polygon(): Polygon{{}, false} {}
+    Polygon(vector<Point2D> p_points, bool p_closed=true): closed{p_closed} {
+        for(auto const& p: p_points) {
+            add_point(p);
+        }
+        if(closed) {
+            close();
+        }
+    }
+    ~Polygon() {}
+    
+    void add_point(Point2D p) {
+        points.push_back(p);
+        if(points.size() > 1) {
+            Point2D p0 = points[points.size()-2];
+            lines.push_back(Line(p0, p));
+        }
+    }
+    
+    void close() {
+        if(points.size() >= 2) {
+            Point2D p0 = points[0];
+            Point2D p1 = points[points.size()-1];
+            lines.push_back(Line(p0, p1));
+        }
+        closed = true;
+    }
+};
+
+inline ostream& operator<<(ostream& os, const Polygon& p)
+{
+    os << "Polygon(";
+    for(auto const& p: p.points) {
+        os << p << "..";
+    }
+    if(p.closed) {
+        os << "closed";
+    }
+    os << ")";
+    return os;
+}
 
 
 class Circle: public Shape {
@@ -90,16 +139,71 @@ public:
     ~Circle() {}
 };
 
+inline ostream& operator<<(ostream& os, const Circle& c)
+{
+    os << "Circle(" << c.center << ", " << c.radius << ")";
+    return os;
+}
 
-class Rectangle: public Shape {
+
+class Arc: public Circle {
 public:
-    double sizex;
-    double sizey;
-    Point2D origin;
+    double start_angle;
+    double stop_angle;
+    Point2D start_point;
+    Point2D stop_point;
     
-    Rectangle(): sizex{1.0}, sizey{1.0}, origin{Point2D()} {}
-    Rectangle(double p_sizex, double p_sizey, Point2D p_origin): sizex{p_sizex}, sizey{p_sizey}, origin{p_origin} {}
-    ~Rectangle() {}
+    Arc(): Arc(Point2D(), 1.0, 0, 90) {}
+    Arc(Point2D p_center, double p_radius, double p_start_angle, double p_stop_angle):
+        Circle{p_center, p_radius}, start_angle{p_start_angle}, stop_angle{p_stop_angle}
+    {
+        double a1 = deg2rad(start_angle);
+        double a2 = deg2rad(stop_angle);
+        start_point = center + radius * Point2D(cos(a1), sin(a1));
+        stop_point = center + radius * Point2D(cos(a2), sin(a2));
+    }
+    ~Arc() {}
 };
 
+
+class Rectangle: public Shape {
+private:
+    double sizex;
+    double sizey;
+public:
+    Point2D point1;
+    Point2D point2;
+    
+    Rectangle(): Rectangle{Point2D(0,0), Point2D(1,1)} {}
+    Rectangle(Point2D p_point1, Point2D p_point2) {
+        point1.x = min(p_point1.x, p_point2.x);
+        point1.y = min(p_point1.y, p_point2.y);
+        point2.x = max(p_point1.x, p_point2.x);
+        point2.y = max(p_point1.y, p_point2.y);
+        sizex = (point2 - point1).x;
+        sizey = (point2 - point1).y;
+    }
+    Rectangle(double p_sizex, double p_sizey, Point2D p_origin): Rectangle(p_origin, Point2D(p_origin.x + p_sizex, p_origin.y + p_sizey)) {}
+    ~Rectangle() {}
+    
+    double area() {
+        return sizex * sizey;
+    }
+    
+    vector<Point2D> get_points() {
+        vector<Point2D> points;
+        points.push_back(point1);
+        points.push_back(Point2D(point2.x, point1.y));
+        points.push_back(point2);
+        points.push_back(Point2D(point1.x, point2.y));
+        return points;
+    }
+};
+
+
+inline ostream& operator<<(ostream& os, const Rectangle& r)
+{
+    os << "Rectangle(" << r.point1 << ", " << r.point2 << ")";
+    return os;
+}
 #endif /* Shapes_h */

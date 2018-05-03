@@ -56,7 +56,7 @@ public:
     
     TikzFigure(): TikzFigure("/Users/rzinkstok/temp/tikz/", "test", "A4", true) {}
     TikzFigure(string p_basedir, string p_name, string p_papersize, bool p_landscape):
-        basedir{p_basedir}, name{p_name}, landscape{landscape}
+        basedir{p_basedir}, name{p_name}, landscape{p_landscape}
     {
         path = basedir + name + ".tex";
         map<string, PaperSize> papersizes = get_papersizes();
