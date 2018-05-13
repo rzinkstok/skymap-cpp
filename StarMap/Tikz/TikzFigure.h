@@ -13,36 +13,23 @@
 #include <fstream>
 #include <sstream>
 #include <map>
+#include "Shapes.h"
+#include "PaperSize.h"
+#include "FontSize.h"
+#include "TikzUtils.h"
+#include "TikzPicture.h"
+
 using namespace std;
 
-// Declarations
+// Function declarations
 string exec(const char*);
-string point2coordinates(Point2D&);
 
 
-
+// Constants
 const string texbin= "/Library/TeX/texbin/";
 
-class PaperSize {
-public:
-    double width;
-    double height;
-    PaperSize(): width(0), height(0) {};
-    PaperSize(double p_width, double p_height): width(p_width), height(p_height) {}
-    ~PaperSize() {};
-};
 
-
-
-map<string, PaperSize> get_papersizes() {
-    map<string, PaperSize> ps;
-    ps["A2"] = PaperSize(420.0, 594.0);
-    ps["A3"] = PaperSize(297.0, 420.0);
-    ps["A4"] = PaperSize(210.0, 297.0);
-    return ps;
-}
-
-
+// Classes
 
 class TikzFigure {
 public:
@@ -51,16 +38,20 @@ public:
     string path;
     ofstream texfile;
     bool landscape;
-    int fontsize;
-    PaperSize papersize;
+    int fontnormalsize;
+    map<string, int> fontsizemap;
+    papersize size;
+    TikzPicture *current_picture;
     
-    TikzFigure(): TikzFigure("/Users/rzinkstok/temp/tikz/", "test", "A4", true) {}
-    TikzFigure(string p_basedir, string p_name, string p_papersize, bool p_landscape):
-        basedir{p_basedir}, name{p_name}, landscape{p_landscape}
+    TikzFigure(): TikzFigure("/Users/rzinkstok/temp/tikz/", "test", "A4", 11) {}
+    TikzFigure(string p_basedir, string p_name, string p_papersize, int p_fontsize):
+        basedir{p_basedir}, name{p_name}, fontnormalsize{p_fontsize}
     {
         path = basedir + name + ".tex";
-        map<string, PaperSize> papersizes = get_papersizes();
-        papersize = papersizes[p_papersize];
+        size = getPaperSize(p_papersize);
+        fontsizemap = getFontSize(fontnormalsize);
+        current_picture = NULL;
+        start();
     }
     TikzFigure(const TikzFigure &other) {}
     ~TikzFigure() {}
@@ -79,19 +70,23 @@ public:
             cout << "File not opened" << endl;
         }
     }
+    
+    void close() {
+        if(!texfile.is_open()) {
+            return;
+        }
+        
+        cout << "Closing file" << endl;
+        texfile.close();
+    }
         
     void write_header() {
         if(!texfile.is_open()) {
             return;
         }
         cout << "Writing header" << endl;
-        texfile << "\\documentclass[";
-        
-        if(landscape) {
-            texfile << "landscape,";
-        }
-        texfile << fontsize << "pt]{{article}}" << endl;
-        texfile << "\\usepackage[paperwidth=" << papersize.width << "mm,paperheight=" << papersize.height << "mm]{{geometry}}" << endl;
+        texfile << "\\documentclass[" << fontnormalsize << "pt]{{article}}" << endl;
+        texfile << "\\usepackage[paperwidth=" << size.width << "mm,paperheight=" << size.height << "mm]{{geometry}}" << endl;
         texfile << "\\usepackage{mathspec}" << endl;
         texfile << "\\usepackage{tikz}" << endl;
         texfile << "\\usetikzlibrary{positioning}" << endl;
@@ -111,49 +106,55 @@ public:
         texfile << "    \\newcommand{\\nano}{\\@setfontsize\\nano{4}{5}}% \\tiny: 6/7" << endl;
         texfile << "\\fi" << endl;
         texfile << "\\makeatother" << endl;
-        texfile << "" << endl;
+        texfile << endl;
         texfile << "\\begin{document}" << endl;
         texfile << "\\pagenumbering{gobble}" << endl;
-        texfile << "" << endl;
+        texfile << endl;
         texfile << "\\newcommand\\normaltextheightem{0.75} % Text height for normalsize" << endl;
         texfile << "\\newcommand\\normaltextdepthem{0.24} % Text depth for normalsize" << endl;
         texfile << "\\pgfmathsetmacro{\\normaltextheight}{\\normaltextheightem em/1mm} % Converted to mm" << endl;
         texfile << "\\pgfmathsetmacro{\\normaltextdepth}{\\normaltextdepthem em/1mm} % Converted to mm" << endl;
         
-//            for fontsize, pointsize in self.fontsizes.items():
-//                texfile << "\\pgfmathsetmacro{{\\{}textheight}}{{{}*\\normaltextheight/{}}} % Text height for {} ({} pt)\n".format(fontsize, pointsize, self.fontsize, fontsize, pointsize))
-//                texfile << "\\pgfmathsetmacro{{\\{}textdepth}}{{{}*\\normaltextdepth/{}}} % Text depth for {} ({} pt)\n".format(fontsize, pointsize, self.fontsize, fontsize, pointsize))
-//                texfile << "" << endl;
-//                texfile << "\\newfontfamily\\condensed{Myriad Pro Condensed}[Numbers={Lining,Proportional}]" << endl;
-//                texfile << "" << endl;
+        for (const auto &p: fontsizemap) {
+            texfile << "\\pgfmathsetmacro{\\" << p.first << "textheight}{" << p.second << "*\\normaltextheight/" << fontnormalsize << "} % Text height for " << p.first << " (" << p.second << " pt)" << endl;
+            texfile << "\\pgfmathsetmacro{\\" << p.first << "textdepth}{" << p.second << "*\\normaltextdepth/" << fontnormalsize << "} % Text depth for " << p.first << " (" << p.second << " pt)" << endl;
+        }
+        
+        texfile << endl;
+        texfile << "\\newfontfamily\\condensed{Myriad Pro Condensed}[Numbers={Lining,Proportional}]" << endl;
     }
     
     void write_footer() {
         if(!texfile.is_open()) {
             return;
         }
+        if(current_picture != NULL) {
+            current_picture->close();
+        }
         cout << "Writing footer" << endl;
         texfile << "\\end{document}" << endl;
     }
     
-    void close() {
-        if(!texfile.is_open()) {
-            return;
-        }
-        cout << "Closing file" << endl;
-        texfile.close();
-    }
-    
-    void write() {
+    void start() {
         open();
         write_header();
-        
-        texfile << "\\begin{tikzpicture}" << endl;
-        texfile << "\\draw (0,0) circle (5mm);" << endl;
-        texfile << "\\end{tikzpicture}" << endl;
-        
+    }
+
+    void finish() {
         write_footer();
         close();
+    }
+    
+    void add(TikzPicture &picture) {
+        cout << "Enter add" << endl;
+        if(current_picture != NULL) {
+            cout << "Current picture is not NULL" << endl;
+            current_picture->close();
+        }
+        cout << "Assigning picture" << endl;
+        current_picture = &picture;
+        cout << "Setting texfile" << endl;
+        picture.set_texfile(texfile);
     }
     
     void render() {
@@ -162,8 +163,14 @@ public:
         cmdss << "cd " << basedir << " && " << texbin << "xelatex " << name << ".tex";
         string cmd = cmdss.str();
         string result = exec(cmd.c_str());
-        //cout << result << endl;
+        cout << result << endl;
     }
+    
+    
+    
+ 
+    
+    
 };
 
 #endif /* TikzFigure_h */

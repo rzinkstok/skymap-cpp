@@ -31,7 +31,7 @@ public:
     
     Line(): Line(Point2D(), Point2D(1,1)) {}
     Line(Point2D p_point1, Point2D p_point2): point1{p_point1}, point2{p_point2} {
-        vector = point2 - point1;
+        vector = Point2D(point2 - point1);
         length = point1.distance(point2);
         angle = rad2deg(atan2(vector.y, vector.x));
     }
@@ -68,7 +68,7 @@ public:
     
     bool point_on_line_segment(Point2D p) const {
         Point2D point_vector = p - point1;
-        double component = (vector * point_vector)/length;
+        double component = point_vector * vector/length;
         return (abs(point_vector.magnitude() - component) < EPSILON) && (component >= 0) && (component <= length);
     }
 };
@@ -190,7 +190,7 @@ public:
         return sizex * sizey;
     }
     
-    vector<Point2D> get_points() {
+    vector<Point2D> get_points() const {
         vector<Point2D> points;
         points.push_back(point1);
         points.push_back(Point2D(point2.x, point1.y));

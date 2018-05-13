@@ -32,13 +32,14 @@ TEST_CASE("Line") {
     REQUIRE(l1.point_on_line_segment(Point2D(1.05, 1.05)) == false);
     REQUIRE(l1.point_on_line_segment(Point2D(0,1)) == false);
     REQUIRE(l1.point_on_line_segment(Point2D(0.5,0.49)) == false);
-    
+
     REQUIRE(l1.intersect_line(l2) == Point2D(0.5, 0.5));
     REQUIRE_THROWS_AS(l1.intersect_line(l3), std::runtime_error);
     REQUIRE(l1.intersect_line(l4) == Point2D(2, 2));
-    
+
     REQUIRE_THROWS_AS(l1.inclusive_intersect_line(l4), std::runtime_error);
 };
+
 
 TEST_CASE("Polygon") {
     Polygon p1 = Polygon();
@@ -58,7 +59,6 @@ TEST_CASE("Polygon") {
     Polygon p2 = Polygon(points, true);
     REQUIRE(p2.points.size() == 3);
     REQUIRE(p2.lines.size() == 3);
-    cout << p2 << endl;
     
     Polygon p3 = Polygon(points, false);
     REQUIRE(p3.points.size() == 3);
@@ -73,6 +73,7 @@ TEST_CASE("Circle") {
     
     
 };
+
 
 TEST_CASE("Rectangle") {
     Rectangle r1 = Rectangle();

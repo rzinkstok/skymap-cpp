@@ -49,6 +49,10 @@ public:
         return ((abs(x - other.x) < EPSILON) && (abs(y - other.y) < EPSILON));
     }
     
+    bool operator!= (const Point2D &other) const {
+        return !(*this == other);
+    }
+    
     Point2D operator+ (const Point2D &other) const {
         return Point2D(x + other.x, y + other.y);
     }
@@ -61,30 +65,30 @@ public:
         return Point2D(-x, -y);
     }
     
-    Point2D operator/ (double s) const {
+    Point2D operator/ (const double s) const {
         double sinv = 1.0/s;
         return Point2D(x * sinv, y * sinv);
     }
     
-    Point2D operator* (double s) const {
+    Point2D operator* (const double s) const {
         return Point2D(x * s, y * s);
     }
     
-    double operator* (Point2D &other) const {
+    double operator* (const Point2D &other) const {
         return x * other.x + y * other.y;
     }
     
-    void operator+= (Point2D &other) {
+    void operator+= (const Point2D &other) {
         x += other.x;
         y += other.y;
     }
     
-    void operator-= (Point2D &other) {
+    void operator-= (const Point2D &other) {
         x -= other.x;
         y -= other.y;
     }
     
-    double operator[] (int i) const {
+    double operator[] (const int i) const {
         if(i==0) {
             return x;
         }
@@ -94,7 +98,7 @@ public:
     }
     
     // utility functions
-    Point2D rotate(double angle) const {
+    Point2D rotate(const double angle) const {
         return Point2D(cos(angle) * x - sin(angle) * y, sin(angle) * x + cos(angle) * y);
     }
     
@@ -102,7 +106,7 @@ public:
         return sqrt(x * x + y * y);
     }
     
-    double distance(Point2D &other) const {
+    double distance(const Point2D &other) const {
         return (*this - other).magnitude();
     }
     
@@ -119,7 +123,7 @@ public:
     
 };
 
-inline Point2D operator* (double s, const Point2D& p) {
+inline Point2D operator* (const double s, const Point2D& p) {
     return p*s;
 }
 
@@ -147,6 +151,10 @@ public:
         p1.reduce();
         p2.reduce();
         return ((abs(p1.x - p2.x) < EPSILON) && (abs(p1.y - p2.y) < EPSILON));
+    }
+    
+    bool operator!= (const SphericalPoint &other) const {
+        return !(*this==other);
     }
     
     SphericalPoint operator= (const SphericalPoint &other) {

@@ -15,6 +15,7 @@
 #include "AzimuthalEquidistantProjection.h"
 #include "EquidistantConicProjection.h"
 #include "TikzFigure.h"
+#include "TikzPicture.h"
 #include "Shapes.h"
 
 using namespace std;
@@ -30,7 +31,21 @@ int top_level_error ( const char * const msg ) {
 int main(int argc, const char * argv[]) {
     try {
         TikzFigure t = TikzFigure();
-        t.write();
+        
+        TikzPicture p = TikzPicture(Point2D(0, 0), Point2D(90, 60));
+        t.add(p);
+        p.set_origin(Point2D(10,10));
+        p.set_box(true);
+        
+        p.draw_line(Line(Point2D(10,10), Point2D(80, 50)));
+        p.dashed_on();
+        p.draw_rectangle(Rectangle(Point2D(5,5), Point2D(85, 55)));
+        p.dotted_on();
+        p.draw_circle(Circle(Point2D(30,40), 25));
+        p.fill_circle(Circle(Point2D(65,25), 10));
+        p.fill_rectangle(Rectangle(Point2D(100,140), Point2D(120,150)));
+        
+        t.finish();
         t.render();
     }
     catch(...) {
