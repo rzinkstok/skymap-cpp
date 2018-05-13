@@ -1,13 +1,13 @@
 //
-//  TikzFigure.h
+//  Tikz.h
 //  StarMap
 //
 //  Created by Roel Zinkstok on 01/05/2018.
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef TikzFigure_h
-#define TikzFigure_h
+#ifndef Tikz_h
+#define Tikz_h
 #include <string>
 #include <iostream>
 #include <fstream>
@@ -31,33 +31,65 @@ const string texbin= "/Library/TeX/texbin/";
 
 // Classes
 
-class TikzFigure {
-public:
-    string basedir;
-    string name;
-    string path;
-    ofstream texfile;
+class Tikz {
+private:
     bool landscape;
     int fontnormalsize;
     map<string, int> fontsizemap;
     papersize size;
     TikzPicture *current_picture;
+    bool started;
+    bool finished;
+    string basedir;
+    string name;
+    string path;
+    ofstream texfile;
     
-    TikzFigure(): TikzFigure("/Users/rzinkstok/temp/tikz/", "test", "A4", 11) {}
-    TikzFigure(string p_basedir, string p_name, string p_papersize, int p_fontsize):
-        basedir{p_basedir}, name{p_name}, fontnormalsize{p_fontsize}
+public:
+    Tikz(): Tikz("/Users/rzinkstok/temp/tikz/", "test", "A4", false, 11) {}
+    Tikz(string p_basedir, string p_name, string p_size, bool p_landscape, int p_fontsize):
+        basedir{p_basedir}, name{p_name}
     {
-        path = basedir + name + ".tex";
-        size = getPaperSize(p_papersize);
-        fontsizemap = getFontSize(fontnormalsize);
         current_picture = NULL;
-        start();
+        started = false;
+        finished = false;
+        
+        path = basedir + name + ".tex";
+        
+        landscape = p_landscape;
+        set_size(p_size);
+        set_fontsize(p_fontsize);
+        
+        
     }
-    TikzFigure(const TikzFigure &other) {}
-    ~TikzFigure() {}
+    Tikz(const Tikz &other) {}
+    ~Tikz() {}
     
-    TikzFigure& operator= (const TikzFigure &other) {
+    Tikz& operator= (const Tikz &other) {
         return *this;
+    }
+    
+    void set_size(string p_size) {
+        if(started) {
+            throw "Cannot set size if Tikz was started";
+        }
+        size = getPaperSize(p_size, landscape);
+    }
+    
+    void set_landscape(bool p_landscape) {
+        if(started) {
+            throw "Cannot set size if Tikz was started";
+        }
+        landscape = p_landscape;
+        size = getPaperSize(size.name, landscape);
+    }
+    
+    void set_fontsize(int p_fontsize) {
+        if(started) {
+            throw "Cannot set size if Tikz was started";
+        }
+        fontnormalsize = p_fontsize;
+        fontsizemap = getFontSize(fontnormalsize);
     }
     
     void open() {
@@ -138,31 +170,40 @@ public:
     void start() {
         open();
         write_header();
+        started = true;
     }
 
     void finish() {
         write_footer();
         close();
+        finished = true;
     }
     
     void add(TikzPicture &picture) {
-        cout << "Enter add" << endl;
+        if(!started) {
+            start();
+        }
         if(current_picture != NULL) {
-            cout << "Current picture is not NULL" << endl;
             current_picture->close();
         }
-        cout << "Assigning picture" << endl;
         current_picture = &picture;
-        cout << "Setting texfile" << endl;
         picture.set_texfile(texfile);
     }
     
     void render() {
+        if(!started) {
+            start();
+        }
+        if(!finished) {
+            finish();
+        }
         cout << "Rendering " << name << endl;
         ostringstream cmdss;
         cmdss << "cd " << basedir << " && " << texbin << "xelatex " << name << ".tex";
         string cmd = cmdss.str();
         string result = exec(cmd.c_str());
+        //cout << result << endl;
+        result = exec(cmd.c_str());
         cout << result << endl;
     }
     
@@ -173,4 +214,4 @@ public:
     
 };
 
-#endif /* TikzFigure_h */
+#endif /* Tikz_h */

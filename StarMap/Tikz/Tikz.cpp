@@ -1,5 +1,5 @@
 //
-//  TikzFigure.cpp
+//  Tikz.cpp
 //  StarMap
 //
 //  Created by Roel Zinkstok on 01/05/2018.
@@ -14,8 +14,8 @@
 #include <string>
 #include <array>
 #include <math.h>
-#include "Point2D.h"
 using namespace std;
+
 
 string exec(const char* cmd) {
     array<char, 128> buffer;

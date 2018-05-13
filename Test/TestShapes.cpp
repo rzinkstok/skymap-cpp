@@ -70,12 +70,29 @@ TEST_CASE("Circle") {
     Circle c = Circle();
     REQUIRE(c.center == Point2D(0, 0));
     REQUIRE(c.radius == Approx(1));
-    
+    REQUIRE(c.area() == Approx(M_PI));
     
 };
+
+
+TEST_CASE("Arc") {
+    Arc a = Arc(Point2D(40,23), 45, 0, 90);
+    vector<Point2D> p = a.interpolated_points();
+    REQUIRE(a.area() == Approx(45*45*M_PI_4));
+    REQUIRE(a.start_point == Point2D(85, 23));
+    REQUIRE(a.stop_point == Point2D(40, 68));
+    REQUIRE(p.size() == 100);
+    REQUIRE(p[0] == a.start_point);
+    REQUIRE(p[99] == a.stop_point);
+    REQUIRE(p[34].distance(Point2D(40,23)) == Approx(45));
+}
 
 
 TEST_CASE("Rectangle") {
     Rectangle r1 = Rectangle();
     vector<Point2D> pp = r1.get_points();
+    REQUIRE(pp.size() == 4);
+    REQUIRE(r1.get_sizex() == Approx(1.0));
+    REQUIRE(r1.get_sizey() == Approx(1.0));
+    REQUIRE(r1.area() == Approx(1.0));
 };

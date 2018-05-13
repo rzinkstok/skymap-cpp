@@ -16,26 +16,30 @@
 
 class TikzPicture {
 private:
-    double minx;
-    double maxx;
-    double miny;
-    double maxy;
-    bool box;
-    bool opened;
-
-    string color;
-    double linewidth;
-    bool dotted;
-    bool dashed;
-    ofstream *texfile;
-    
-public:
     Point2D p1;
     Point2D p2;
     Point2D origin;
     Rectangle bounding_box;
+    double minx;
+    double maxx;
+    double miny;
+    double maxy;
     
-    TikzPicture(Point2D p_p1, Point2D p_p2, Point2D p_origin, bool p_box): p1{p_p1}, p2{p_p2}, box{p_box} {
+    vector<Point2D> clipping_path;
+    bool boxed;
+    bool opened;
+    
+    string color;
+    double linewidth;
+    bool dotted;
+    bool dashed;
+    
+    ofstream *texfile;
+    
+public:
+    
+    
+    TikzPicture(Point2D p_p1, Point2D p_p2, Point2D p_origin, bool p_boxed): p1{p_p1}, p2{p_p2}, boxed{p_boxed} {
         set_origin(p_origin);
         dotted = false;
         dashed = false;
@@ -43,7 +47,7 @@ public:
         color = "black";
         opened = false;
     }
-    TikzPicture(Point2D p_p1, Point2D p_p2, bool p_box): TikzPicture(p_p1, p_p2, Point2D(0, 0), p_box) {}
+    TikzPicture(Point2D p_p1, Point2D p_p2, bool p_boxed): TikzPicture(p_p1, p_p2, Point2D(0, 0), p_boxed) {}
     TikzPicture(Point2D p_p1, Point2D p_p2): TikzPicture(p_p1, p_p2, Point2D(0, 0), false) {}
     ~TikzPicture() {}
     
@@ -58,12 +62,24 @@ public:
         bounding_box = Rectangle(Point2D(minx, miny), Point2D(maxx, maxy));
     }
     
-    void set_box(bool p_box) {
-        box = p_box;
+    void set_boxed(bool p_boxed) {
+        boxed = p_boxed;
     }
     
     void set_texfile(ofstream &p_texfile) {
         texfile = &p_texfile;
+    }
+    
+    ofstream *get_texfile() const {
+        return texfile;
+    }
+    
+    vector<Point2D> get_bounding_box_path() const {
+        return bounding_box.get_points();
+    }
+    
+    void set_clipping_path(vector<Point2D> path) {
+        clipping_path = path;
     }
     
     // Open and close picture
@@ -80,17 +96,18 @@ public:
             shift << "{(current page.south west)}";
         }
         
-        cout << "Writing start of tikzpicture" << endl;
+        cout << "Open TikzPicture" << endl;
         *texfile << "\\begin{tikzpicture}[remember picture, overlay, shift=" << shift.str() << ", every node/.style={inner sep=0mm, outer sep=0mm, minimum size=0mm, text height=\\normaltextheight, text depth=\\normaltextdepth}]" << endl;
         opened = true;
         
-        if(box) {
+        if(boxed) {
             draw_bounding_box();
         }
     }
     
     void close() {
         if(opened) {
+            cout << "Close TikzPicture" << endl;
             *texfile << "\\end{tikzpicture}" << endl << endl;
             texfile = NULL;
         }
@@ -127,8 +144,13 @@ public:
         set_dotted(true);
     }
     
-    void dotted_of() {
+    void dotted_off() {
         set_dotted(false);
+    }
+    
+    void unbroken() {
+        set_dotted(false);
+        set_dashed(false);
     }
     
     string draw_options() {
@@ -154,7 +176,7 @@ public:
         *texfile << "\\draw " << draw_options() << " " << point2coordinates(l.point1) << "--" << point2coordinates(l.point2) << ";" << endl;
     }
     
-    void draw_path(const vector<Point2D> points, bool cycle=true) {
+    void draw_path(const vector<Point2D> points, bool cycle=false) {
         open();
         *texfile << "\\draw " << draw_options() << " " << points2path(points, cycle) << ";" << endl;
     }
@@ -185,6 +207,27 @@ public:
     void fill_circle(const Circle c) {
         open();
         *texfile << "\\fill [" << color << "] " << point2coordinates(c.center) << " circle (" << c.radius << "mm);" << endl;
+    }
+    
+    void draw_arc(const Arc a) {
+        if(a.radius > 2000) {
+            draw_path(a.interpolated_points());
+        }
+        *texfile << "\\draw " << draw_options() << " ([shift=(" << a.start_angle << ":" << a.radius << "mm)]" << a.center.x << "mm," << a.center.y << "mm) ";
+        *texfile << "arc (" << a.start_angle << ":" << a.stop_angle << ":" << a.radius << "mm);" << endl;
+    }
+    
+    void draw_label() {
+        
+    }
+    
+    // Clipping
+    TikzClip clip() {
+        return clip(clipping_path);
+    }
+    
+    TikzClip clip(vector<Point2D> path) {
+        return TikzClip(texfile, path);
     }
 };
 

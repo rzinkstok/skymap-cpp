@@ -11,59 +11,66 @@
 
 
 struct papersize {
-    double width;
-    double height;
+    int width;
+    int height;
+    string name;
 };
 
 
-papersize getAPaperSize(int index) {
+papersize getAPaperSize(int index, bool landscape=false) {
     if(index<0) {
         throw "Invalid papersize";
     }
     
-    double x = sqrt(1000000.0/(pow(2, index) * sqrt(2)));
-    double y = sqrt(2) * x;
+    int x = (int)round(sqrt(1000000.0/(pow(2, index) * sqrt(2))));
+    int y = (int)round(sqrt(2) * x);
     
-    return papersize{x, y};
+    if(landscape) {
+        return papersize{y, x, "A" + to_string(index)};
+    }
+    else {
+        return papersize{x, y, "A" + to_string(index)};
+    }
 }
 
 
-papersize getBPaperSize(int index) {
+papersize getBPaperSize(int index, bool landscape=false) {
     if(index<0) {
         throw "Invalid papersize";
     }
     
-    papersize ps1 = getAPaperSize(index);
-    papersize ps2 = getAPaperSize(index+1);
-    return papersize{0.5*(ps1.width + ps2.width), 0.5*(ps1.height + ps2.height)};
+    papersize ps1 = getAPaperSize(index, landscape);
+    papersize ps2 = getAPaperSize(index+1, landscape);
+    
+    return papersize{(int)round(0.5*(ps1.width + ps2.width)), (int)round(0.5*(ps1.height + ps2.height)), "B" + to_string(index)};
 }
 
 
-papersize getCPaperSize(int index) {
+papersize getCPaperSize(int index, bool landscape=false) {
     if(index<0) {
         throw "Invalid papersize";
     }
     
-    papersize ps1 = getAPaperSize(index);
-    papersize ps2 = getBPaperSize(index);
-    return papersize{0.5*(ps1.width + ps2.width), 0.5*(ps1.height + ps2.height)};
+    papersize ps1 = getAPaperSize(index, landscape);
+    papersize ps2 = getBPaperSize(index, landscape);
     
+    return papersize{(int)round(0.5*(ps1.width + ps2.width)), (int)round(0.5*(ps1.height + ps2.height)), "C" + to_string(index)};
 }
 
 
-papersize getPaperSize(string ps) {
+papersize getPaperSize(string ps, bool landscape=false) {
     int index = stoi(ps.substr(1));
-    papersize result;
     
     switch(ps[0]) {
         case 'A':
-            result = getAPaperSize(index);
+            return getAPaperSize(index, landscape);
+            
         case 'B':
-            result = getBPaperSize(index);
+            return getBPaperSize(index, landscape);
         case 'C':
-            result = getCPaperSize(index);
+            return getCPaperSize(index, landscape);
         default:
-            return result;
+            return papersize{};
     }
 }
 

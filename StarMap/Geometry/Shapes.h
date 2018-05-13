@@ -137,6 +137,10 @@ public:
     Circle(): center{Point2D()}, radius{1.0} {}
     Circle(Point2D p_center, double p_radius): center{p_center}, radius{p_radius} {}
     ~Circle() {}
+    
+    double area() const {
+        return M_PI * pow(radius, 2);
+    }
 };
 
 inline ostream& operator<<(ostream& os, const Circle& c)
@@ -163,6 +167,23 @@ public:
         stop_point = center + radius * Point2D(cos(a2), sin(a2));
     }
     ~Arc() {}
+    
+    double area() const {
+        return pow(radius, 2.0) * M_PI * abs(stop_angle - start_angle) / 360.0;
+    }
+    
+    vector<Point2D> interpolated_points(int npoints=100) const {
+        double angle;
+        Point2D p;
+        vector<Point2D> points;
+        double delta_angle = stop_angle - start_angle;
+        for(int i=0; i<npoints; i++) {
+            angle = start_angle + i * delta_angle / (npoints-1);
+            p = center + radius * Point2D(cos(deg2rad(angle)), sin(deg2rad(angle)));
+            points.push_back(p);
+        }
+        return points;
+    }
 };
 
 
@@ -186,8 +207,16 @@ public:
     Rectangle(double p_sizex, double p_sizey, Point2D p_origin): Rectangle(p_origin, Point2D(p_origin.x + p_sizex, p_origin.y + p_sizey)) {}
     ~Rectangle() {}
     
-    double area() {
+    double area() const {
         return sizex * sizey;
+    }
+    
+    double get_sizex() const {
+        return sizex;
+    }
+    
+    double get_sizey() const {
+        return sizey;
     }
     
     vector<Point2D> get_points() const {

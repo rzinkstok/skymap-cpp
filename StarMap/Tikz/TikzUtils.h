@@ -9,6 +9,7 @@
 #ifndef TikzUtils_h
 #define TikzUtils_h
 
+
 string point2coordinates(const Point2D &p) {
     double x = p.x;
     double y = p.y;
@@ -22,6 +23,7 @@ string point2coordinates(const Point2D &p) {
     ss << "(" << x << "mm," << y << "mm)";
     return ss.str();
 }
+
 
 string points2path(const vector<Point2D> points, bool cycle=true) {
     // Builds a Tikz path from the given list of points
@@ -40,5 +42,18 @@ string points2path(const vector<Point2D> points, bool cycle=true) {
 }
 
 
+class TikzClip {
+private:
+    ofstream *texfile;
+public:
+    TikzClip(ofstream *p_texfile, vector<Point2D> &path) {
+        texfile = p_texfile;
+        *texfile << "\\begin{scope}" << endl;
+        *texfile << "\\clip " << points2path(path) << ";" << endl;
+    }
+    ~TikzClip() {
+        *texfile << "\\end{scope}" << endl;
+    }
+};
 
 #endif /* TikzUtils_h */
