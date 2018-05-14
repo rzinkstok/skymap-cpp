@@ -10,6 +10,12 @@
 #define TikzUtils_h
 
 
+/**
+ *   @brief  Converts a Point2D instance to a Tikz coordinate string
+ *
+ *   @param  p is a Point2D that is to be converted
+ *   @return a string representing the coordinates of the point
+ */
 string point2coordinates(const Point2D &p) {
     double x = p.x;
     double y = p.y;
@@ -25,6 +31,13 @@ string point2coordinates(const Point2D &p) {
 }
 
 
+/**
+ *   @brief  Converts a vector of Point2D instances to a Tikz path
+ *
+ *   @param  points is a vector of Point2D instances
+ *   @param  cycle indicates whether the path should be closed using --cycle
+ *   @return a string representing the path
+ */
 string points2path(const vector<Point2D> points, bool cycle=true) {
     // Builds a Tikz path from the given list of points
     ostringstream path;
@@ -42,15 +55,32 @@ string points2path(const vector<Point2D> points, bool cycle=true) {
 }
 
 
+/**
+ *   @brief  Context manager for clipping
+ *
+ *   @section Usage
+ *   Delineate the scope of the clipping by using braces. Instantiate a TikzClip object before any
+ *   other drawing commands.
+ */
 class TikzClip {
 private:
     ofstream *texfile;
 public:
+    /**
+     *   @brief  Constructor, starts the clipping scope and sets the clipping path
+     *
+     *   @param  p_texfile is the ofstream of the opened tex file
+     *   @param  path is the clipping path to use
+     */
     TikzClip(ofstream *p_texfile, vector<Point2D> &path) {
         texfile = p_texfile;
         *texfile << "\\begin{scope}" << endl;
         *texfile << "\\clip " << points2path(path) << ";" << endl;
     }
+    
+    /**
+     *   @brief  Destructor, ends the clipping scope
+     */
     ~TikzClip() {
         *texfile << "\\end{scope}" << endl;
     }

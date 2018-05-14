@@ -64,7 +64,6 @@ papersize getPaperSize(string ps, bool landscape=false) {
     switch(ps[0]) {
         case 'A':
             return getAPaperSize(index, landscape);
-            
         case 'B':
             return getBPaperSize(index, landscape);
         case 'C':
