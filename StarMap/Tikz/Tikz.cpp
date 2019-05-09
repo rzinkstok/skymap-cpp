@@ -17,6 +17,12 @@
 using namespace std;
 
 
+/**
+ *   @brief  Executes a command in the shell
+ *
+ *   @param  cmd is the command to be executed
+ *   @return a string containing the console output of the command
+ */
 string exec(const char* cmd) {
     array<char, 128> buffer;
     string result;

@@ -10,6 +10,7 @@
 #define PaperSize_h
 
 
+// Defines a paper size struct containing width, height (both in mm) and the name of the papersize
 struct papersize {
     int width;
     int height;
@@ -17,6 +18,12 @@ struct papersize {
 };
 
 
+/**
+ *   @brief  Gets the papersize for A-series paper sizes
+ *
+ *   @param  index indicates the numerical value of the paper size (e.g. the 4 in A4)
+ *   @param  landscape indicates whether to return the size for a landscape orientation
+ */
 papersize getAPaperSize(int index, bool landscape=false) {
     if(index<0) {
         throw "Invalid papersize";
@@ -34,6 +41,12 @@ papersize getAPaperSize(int index, bool landscape=false) {
 }
 
 
+/**
+ *   @brief  Gets the papersize for B-series paper sizes
+ *
+ *   @param  index indicates the numerical value of the paper size (e.g. the 4 in B4)
+ *   @param  landscape indicates whether to return the size for a landscape orientation
+ */
 papersize getBPaperSize(int index, bool landscape=false) {
     if(index<0) {
         throw "Invalid papersize";
@@ -46,6 +59,12 @@ papersize getBPaperSize(int index, bool landscape=false) {
 }
 
 
+/**
+ *   @brief  Gets the papersize for C-series paper sizes
+ *
+ *   @param  index indicates the numerical value of the paper size (e.g. the 4 in C4)
+ *   @param  landscape indicates whether to return the size for a landscape orientation
+ */
 papersize getCPaperSize(int index, bool landscape=false) {
     if(index<0) {
         throw "Invalid papersize";
@@ -58,6 +77,12 @@ papersize getCPaperSize(int index, bool landscape=false) {
 }
 
 
+/**
+ *   @brief  Gets the papersize for A, B or C-series paper sizes
+ *
+ *   @param  ps is a string containing the paper size name
+ *   @param  landscape indicates whether to return the size for a landscape orientation
+ */
 papersize getPaperSize(string ps, bool landscape=false) {
     int index = stoi(ps.substr(1));
     
