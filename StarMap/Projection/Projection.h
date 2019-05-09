@@ -17,13 +17,13 @@ private:
     bool celestial;
 public:
     Projection():
-        center_longitude{0.0}, reference_scale{1.0}, celestial{false} {
+        center_longitude(0.0), reference_scale(1.0), celestial(false) {
     #if VERBOSE
         std::cout << "Created Projection()" << std::endl;
     #endif
     }
     Projection(double p_center_longitude, double p_reference_scale, bool p_celestial):
-        center_longitude{p_center_longitude}, reference_scale{p_reference_scale}, celestial{p_celestial} {
+        center_longitude(p_center_longitude), reference_scale(p_reference_scale), celestial(p_celestial) {
     #if VERBOSE
         std::cout << "Created Projection(double, double, bool)" << std::endl;
     #endif
@@ -37,7 +37,7 @@ public:
     double get_center_longitude() const { return center_longitude; }
     double get_reference_scale() const { return reference_scale; }
         
-    bool get_celestial() const {return celestial; }
+    bool get_celestial() const { return celestial; }
     void set_celestial(bool p_celestial) { celestial = p_celestial; }
     
     // Project a point with longitude/latitude in degrees to a point on the plane

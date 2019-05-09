@@ -64,19 +64,10 @@ public:
      *   @param  p_fontsize indicates the fontsize for the normalsize font
      */
     Tikz(string p_basedir, string p_name, string p_size, bool p_landscape, int p_fontsize):
-        basedir{p_basedir}, name{p_name}
+        basedir(p_basedir), name(p_name), current_picture(NULL), started(false), finished(false), path(basedir + name + ".tex"), landscape(p_landscape)
     {
-        current_picture = NULL;
-        started = false;
-        finished = false;
-        
-        path = basedir + name + ".tex";
-        
-        landscape = p_landscape;
         set_size(p_size);
         set_fontsize(p_fontsize);
-        
-        
     }
     
     /**
@@ -270,7 +261,6 @@ public:
         cmdss << "cd " << basedir << " && " << texbin << "xelatex " << name << ".tex";
         string cmd = cmdss.str();
         string result = exec(cmd.c_str());
-        //cout << result << endl;
         result = exec(cmd.c_str());
         cout << result << endl;
     }

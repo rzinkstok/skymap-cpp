@@ -33,7 +33,7 @@ public:
     }
     
     EquidistantConicProjection(SphericalPoint p_center, double p_standard_parallel1, double p_standard_parallel2, double p_reference_scale, bool p_celestial):
-        Projection(p_center.longitude, p_reference_scale, p_celestial), center_latitude{p_center.latitude}, standard_parallel1{p_standard_parallel1}, standard_parallel2{p_standard_parallel2}
+        Projection(p_center.longitude, p_reference_scale, p_celestial), center_latitude(p_center.latitude), standard_parallel1(p_standard_parallel1), standard_parallel2(p_standard_parallel2)
     {
         cone_angle = 90 - 0.5 * abs(standard_parallel1 + standard_parallel2);
         double phi1 = deg2rad(standard_parallel1);

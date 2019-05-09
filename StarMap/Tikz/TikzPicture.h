@@ -48,7 +48,9 @@ public:
      *   @param  p_origin is the location of the origin of the picture's coordinate system, in paper coordinates
      *   @param  p_boxed indicates whether a box is drawn around the picture
      */
-    TikzPicture(Point2D p_p1, Point2D p_p2, Point2D p_origin, bool p_boxed): p1{p_p1}, p2{p_p2}, boxed{p_boxed} {
+    TikzPicture(Point2D p_p1, Point2D p_p2, Point2D p_origin, bool p_boxed):
+        p1(p_p1), p2(p_p2), boxed(p_boxed)
+    {
         set_origin(p_origin);
         dotted = false;
         dashed = false;
@@ -377,6 +379,10 @@ public:
      *   @brief  Creates a TikzClip object that can be used for creating clipping scopes
      *
      *   @param  path is a vector of Point2D instances describing the clipping path
+     *
+     *   @section usage
+     *   Delineate the scope of the clipping by using braces. Instantiate a TikzClip object
+     *   using this method before any other drawing commands.
      */
     TikzClip clip(vector<Point2D> path) {
         return TikzClip(texfile, path);

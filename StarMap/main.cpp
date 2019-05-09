@@ -16,7 +16,7 @@
 
 using namespace std;
 
-int top_level_error ( const char * const msg ) {
+int top_level_error(const char * const msg) {
     if ( fprintf( stderr, "Application error: %s\n", msg ) < 0 ) {
         // It's hard to decide what to do here. At least let the developer know.
         assert( false );
