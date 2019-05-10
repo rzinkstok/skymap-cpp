@@ -8,8 +8,10 @@
 
 #ifndef Shapes_h
 #define Shapes_h
-#include <math.h>
-#include <stdio.h>
+
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include <cstdio>
 #include <vector>
 #include <exception>
 using namespace std;
@@ -197,10 +199,10 @@ public:
     
     Rectangle(): Rectangle{Point2D(0,0), Point2D(1,1)} {}
     Rectangle(Point2D p_point1, Point2D p_point2) {
-        point1.x = min(p_point1.x, p_point2.x);
-        point1.y = min(p_point1.y, p_point2.y);
-        point2.x = max(p_point1.x, p_point2.x);
-        point2.y = max(p_point1.y, p_point2.y);
+        point1.x = fmin(p_point1.x, p_point2.x);
+        point1.y = fmin(p_point1.y, p_point2.y);
+        point2.x = fmax(p_point1.x, p_point2.x);
+        point2.y = fmax(p_point1.y, p_point2.y);
         sizex = (point2 - point1).x;
         sizey = (point2 - point1).y;
     }

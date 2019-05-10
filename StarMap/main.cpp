@@ -6,21 +6,21 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#define VERBOSE false
+#define _USE_MATH_DEFINES
 #include <iostream>
-#include <math.h>
-#include "Point2D.h"
-#include "Tikz.h"
-#include "TikzPicture.h"
-#include "Shapes.h"
+#include <cmath>
+
+#define VERBOSE false
+#include "./Geometry/Point2D.h"
+#include "./Tikz/Tikz.h"
+#include "./Tikz/TikzPicture.h"
+#include "./Geometry/Shapes.h"
+
 
 using namespace std;
 
 int top_level_error(const char * const msg) {
-    if ( fprintf( stderr, "Application error: %s\n", msg ) < 0 ) {
-        // It's hard to decide what to do here. At least let the developer know.
-        assert( false );
-    }
+	cout << "Application error: " << msg << std::endl;
     return 1;
 }
 

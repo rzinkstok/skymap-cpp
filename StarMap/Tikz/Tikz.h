@@ -8,16 +8,18 @@
 
 #ifndef Tikz_h
 #define Tikz_h
+
+#define _USE_MATH_DEFINES
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <map>
-#include "Shapes.h"
-#include "PaperSize.h"
-#include "FontSize.h"
-#include "TikzUtils.h"
-#include "TikzPicture.h"
+#include "../Geometry/Shapes.h"
+#include "./PaperSize.h"
+#include "./FontSize.h"
+#include "./TikzUtils.h"
+#include "./TikzPicture.h"
 
 using namespace std;
 
@@ -52,7 +54,7 @@ public:
     /**
      *   @brief  Default constructor.
      */
-    Tikz(): Tikz("/Users/rzinkstok/temp/tikz/", "test", "A4", false, 11) {}
+    Tikz(): Tikz("c:\\temp\\", "test", "A4", false, 11) {}
     
     /**
      *   @brief  Constructor
@@ -130,7 +132,7 @@ public:
      */
     void open() {
         cout << "Opening file " << path << endl;
-        texfile.open(path);
+		texfile.open(path);
         if (texfile.is_open()) {
             cout << "File opened correctly" << endl;
         }

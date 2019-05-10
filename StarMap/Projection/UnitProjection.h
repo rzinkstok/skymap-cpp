@@ -9,8 +9,9 @@
 #ifndef UnitProjection_h
 #define UnitProjection_h
 
-#include "Point2D.h"
-#include "Projection.h"
+#define _USE_MATH_DEFINES
+#include "../Geometry/Point2D.h"
+#include "./Projection.h"
 
 class UnitProjection: public Projection {
 public:

@@ -9,8 +9,9 @@
 #ifndef AzimuthalEquidistantProjection_h
 #define AzimuthalEquidistantProjection_h
 
-#include "Point2D.h"
-#include "Projection.h"
+#define _USE_MATH_DEFINES
+#include "../Geometry/Point2D.h"
+#include "./Projection.h"
 
 class AzimuthalEquidistantProjection: public Projection {
 private:

@@ -9,7 +9,8 @@
 #ifndef EquidistantCylindricalProjection_h
 #define EquidistantCylindricalProjection_h
 
-#include "Point2D.h"
+#define _USE_MATH_DEFINES
+#include "../Geometry/Point2D.h"
 #include "Projection.h"
 
 class EquidistantCylindricalProjection: public Projection {

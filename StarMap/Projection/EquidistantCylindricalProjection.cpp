@@ -6,10 +6,11 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#include <stdio.h>
-#include "Point2D.h"
-#include "Projection.h"
-#include "EquidistantCylindricalProjection.h"
+#define _USE_MATH_DEFINES
+#include <iostream>
+#include "../Geometry/Point2D.h"
+#include "./Projection.h"
+#include "./EquidistantCylindricalProjection.h"
 
 
 Point2D EquidistantCylindricalProjection::project(SphericalPoint &sp) const {

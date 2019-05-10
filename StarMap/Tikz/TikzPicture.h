@@ -8,11 +8,13 @@
 
 #ifndef TikzPicture_h
 #define TikzPicture_h
+
+#define _USE_MATH_DEFINES
 #include <sstream>
 #include <string>
-#include "Point2D.h"
-#include "Shapes.h"
-#include "TikzUtils.h"
+#include "../Geometry/Point2D.h"
+#include "../Geometry/Shapes.h"
+#include "./TikzUtils.h"
 
 
 /**

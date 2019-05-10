@@ -8,9 +8,12 @@
 
 #ifndef Point2D_h
 #define Point2D_h
+
+#define _USE_MATH_DEFINES // for C++
+#include <cmath>
 #include <iostream>
-#include <math.h>
 #include <exception>
+
 #define EPSILON 1e-10
 
 

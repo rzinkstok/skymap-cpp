@@ -6,8 +6,8 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#include <stdio.h>
-#include "Point2D.h"
+#define _USE_MATH_DEFINES
+#include "../Geometry/Point2D.h"
 #include "Projection.h"
 
 double Projection::reduce_longitude(double longitude) const {

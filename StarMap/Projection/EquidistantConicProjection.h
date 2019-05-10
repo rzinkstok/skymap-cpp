@@ -9,9 +9,10 @@
 #ifndef EquidistantConicProjection_h
 #define EquidistantConicProjection_h
 
-#include <math.h>
-#include "Point2D.h"
-#include "Projection.h"
+#define _USE_MATH_DEFINES
+#include <cmath>
+#include "../Geometry/Point2D.h"
+#include "./Projection.h"
 
 
 class EquidistantConicProjection: public Projection {
