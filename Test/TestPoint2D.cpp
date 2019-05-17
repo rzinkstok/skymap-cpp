@@ -6,11 +6,11 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#include <stdio.h>
+#include <iostream>
 #include <exception>
-#include <math.h>
-#include "Point2D.h"
-#include "catch.hpp"
+#include <cmath>
+#include "../StarMap/Geometry/Point2D.h"
+#include "./catch.hpp"
 
 
 TEST_CASE("Point2D") {

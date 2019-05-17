@@ -9,7 +9,6 @@
 #ifndef EquidistantConicProjection_h
 #define EquidistantConicProjection_h
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include "../Geometry/Point2D.h"
 #include "./Projection.h"

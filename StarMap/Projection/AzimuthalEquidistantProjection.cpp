@@ -7,7 +7,6 @@
 //
 
 
-#define _USE_MATH_DEFINES
 #include <iostream>
 #include <cmath>
 #include "../Geometry/Point2D.h"

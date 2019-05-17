@@ -7,9 +7,9 @@
 //
 
 #include <stdio.h>
-#include "Point2D.h"
-#include "AzimuthalEquidistantProjection.h"
-#include "catch.hpp"
+#include "../StarMap/Geometry/Point2D.h"
+#include "../StarMap/Projection/AzimuthalEquidistantProjection.h"
+#include "./catch.hpp"
 
 using namespace std;
 

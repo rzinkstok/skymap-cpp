@@ -1,1 +1,24 @@
 StarMap.xcodeproj/
+*.tlog
+*.obj
+
+# Build results
+[Dd]ebug/
+[Dd]ebubPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+
+# Visual Studio cache/options directory
+.vs/
+
+# Visual Studio auto generated files
+Generated\ Files/
+

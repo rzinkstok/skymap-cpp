@@ -9,6 +9,13 @@
 #ifndef TikzUtils_h
 #define TikzUtils_h
 
+#include <cmath>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <fstream>
+#include "../Geometry/Point2D.h"
+
 
 /**
  *   @brief  Converts a Point2D instance to a Tikz coordinate string
@@ -16,7 +23,7 @@
  *   @param  p is a Point2D that is to be converted
  *   @return a string representing the coordinates of the point
  */
-string point2coordinates(const Point2D &p) {
+std::string point2coordinates(const Point2D &p) {
     double x = p.x;
     double y = p.y;
     if(abs(x) < 1e-4) {
@@ -25,7 +32,7 @@ string point2coordinates(const Point2D &p) {
     if(abs(y) < 1e-4) {
         y = 0.0;
     }
-    ostringstream ss;
+	std::ostringstream ss;
     ss << "(" << x << "mm," << y << "mm)";
     return ss.str();
 }
@@ -38,9 +45,9 @@ string point2coordinates(const Point2D &p) {
  *   @param  cycle indicates whether the path should be closed using --cycle
  *   @return a string representing the path
  */
-string points2path(const vector<Point2D> points, bool cycle=true) {
+std::string points2path(const std::vector<Point2D> points, bool cycle=true) {
     // Builds a Tikz path from the given list of points
-    ostringstream path;
+	std::ostringstream path;
     
     for(int i=0; i<points.size(); i++) {
         if(i!=0) {
@@ -64,7 +71,7 @@ string points2path(const vector<Point2D> points, bool cycle=true) {
  */
 class TikzClip {
 private:
-    ofstream *texfile;
+	std::ofstream *texfile;
 public:
     /**
      *   @brief  Constructor, starts the clipping scope and sets the clipping path
@@ -72,17 +79,17 @@ public:
      *   @param  p_texfile is the ofstream of the opened tex file
      *   @param  path is the clipping path to use
      */
-    TikzClip(ofstream *p_texfile, vector<Point2D> &path) {
+    TikzClip(std::ofstream *p_texfile, std::vector<Point2D> &path) {
         texfile = p_texfile;
-        *texfile << "\\begin{scope}" << endl;
-        *texfile << "\\clip " << points2path(path) << ";" << endl;
+        *texfile << "\\begin{scope}" << std::endl;
+        *texfile << "\\clip " << points2path(path) << ";" << std::endl;
     }
     
     /**
      *   @brief  Destructor, ends the clipping scope
      */
     ~TikzClip() {
-        *texfile << "\\end{scope}" << endl;
+        *texfile << "\\end{scope}" << std::endl;
     }
 };
 

@@ -8,13 +8,13 @@
 
 #ifndef PaperSize_h
 #define PaperSize_h
-
+#include <string>
 
 // Defines a paper size struct containing width, height (both in mm) and the name of the papersize
 struct papersize {
     int width;
     int height;
-    string name;
+	std::string name;
 };
 
 
@@ -33,10 +33,10 @@ papersize getAPaperSize(int index, bool landscape=false) {
     int y = (int)round(sqrt(2) * x);
     
     if(landscape) {
-        return papersize{y, x, "A" + to_string(index)};
+        return papersize{y, x, "A" + std::to_string(index)};
     }
     else {
-        return papersize{x, y, "A" + to_string(index)};
+        return papersize{x, y, "A" + std::to_string(index)};
     }
 }
 
@@ -55,7 +55,7 @@ papersize getBPaperSize(int index, bool landscape=false) {
     papersize ps1 = getAPaperSize(index, landscape);
     papersize ps2 = getAPaperSize(index+1, landscape);
     
-    return papersize{(int)round(0.5*(ps1.width + ps2.width)), (int)round(0.5*(ps1.height + ps2.height)), "B" + to_string(index)};
+    return papersize{(int)round(0.5*(ps1.width + ps2.width)), (int)round(0.5*(ps1.height + ps2.height)), "B" + std::to_string(index)};
 }
 
 
@@ -73,7 +73,7 @@ papersize getCPaperSize(int index, bool landscape=false) {
     papersize ps1 = getAPaperSize(index, landscape);
     papersize ps2 = getBPaperSize(index, landscape);
     
-    return papersize{(int)round(0.5*(ps1.width + ps2.width)), (int)round(0.5*(ps1.height + ps2.height)), "C" + to_string(index)};
+    return papersize{(int)round(0.5*(ps1.width + ps2.width)), (int)round(0.5*(ps1.height + ps2.height)), "C" + std::to_string(index)};
 }
 
 
@@ -83,8 +83,8 @@ papersize getCPaperSize(int index, bool landscape=false) {
  *   @param  ps is a string containing the paper size name
  *   @param  landscape indicates whether to return the size for a landscape orientation
  */
-papersize getPaperSize(string ps, bool landscape=false) {
-    int index = stoi(ps.substr(1));
+papersize getPaperSize(std::string ps, bool landscape=false) {
+    int index = std::stoi(ps.substr(1));
     
     switch(ps[0]) {
         case 'A':

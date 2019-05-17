@@ -9,7 +9,6 @@
 #ifndef UnitProjection_h
 #define UnitProjection_h
 
-#define _USE_MATH_DEFINES
 #include "../Geometry/Point2D.h"
 #include "./Projection.h"
 

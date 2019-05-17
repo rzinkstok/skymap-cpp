@@ -6,7 +6,6 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#define _USE_MATH_DEFINES
 #include <iostream>
 #include <cmath>
 #include "../Geometry/Point2D.h"

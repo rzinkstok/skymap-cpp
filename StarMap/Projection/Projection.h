@@ -9,7 +9,6 @@
 #ifndef Projection_h
 #define Projection_h
 
-#define _USE_MATH_DEFINES
 #include "../Geometry/Point2D.h"
 
 class Projection {

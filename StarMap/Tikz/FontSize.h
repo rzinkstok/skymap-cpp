@@ -8,7 +8,10 @@
 
 #ifndef FontSize_h
 #define FontSize_h
-
+#include <cmath>
+#include <string>
+#include <vector>
+#include <map>
 
 /**
  *   @brief  Calculates the pointsize for a TeX fontsize using the specified normalsize as reference
@@ -26,9 +29,9 @@ int calculateFontSize(int index, double normalsize) {
  *
  *   @param  normalsize specifies the point size for normalsize fonts
  */
-map<string, int> getFontSize(double normalsize=11) {
-    map<string, int> result;
-    vector<string> texsizes = {"nano", "miniscule", "tiny", "scriptsize", "footnotesize", "small", "normalsize", "large", "Large", "LARGE", "huge", "Huge", "HUGE"};
+std::map<std::string, int> getFontSize(double normalsize=11) {
+	std::map<std::string, int> result;
+	std::vector<std::string> texsizes = {"nano", "miniscule", "tiny", "scriptsize", "footnotesize", "small", "normalsize", "large", "Large", "LARGE", "huge", "Huge", "HUGE"};
     for(int i=0; i<texsizes.size(); i++) {
         result[texsizes[i]] = calculateFontSize(i+1, normalsize);
     }

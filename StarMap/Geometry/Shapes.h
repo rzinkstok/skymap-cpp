@@ -9,12 +9,12 @@
 #ifndef Shapes_h
 #define Shapes_h
 
-#define _USE_MATH_DEFINES
 #include <cmath>
 #include <cstdio>
 #include <vector>
 #include <exception>
-using namespace std;
+#include "Point2D.h"
+
 
 class Shape {
 public:
@@ -50,7 +50,7 @@ public:
         
         double den = (a1 * b2 - a2 * b1);
         if(abs(den) == 0.0) {
-            throw runtime_error("Parallel lines do not intersect");
+            throw std::runtime_error("Parallel lines do not intersect");
         }
         
         Point2D result = Point2D();
@@ -65,7 +65,7 @@ public:
         if(point_on_line_segment(p) && other.point_on_line_segment(p)) {
             return p;
         }
-        throw runtime_error("Intersection not within line segment(s)");
+        throw std::runtime_error("Intersection not within line segment(s)");
     }
     
     bool point_on_line_segment(Point2D p) const {
@@ -75,7 +75,7 @@ public:
     }
 };
 
-inline ostream& operator<<(ostream& os, const Line& l)
+inline std::ostream& operator<<(std::ostream& os, const Line& l)
 {
     os << "Line(" << l.point1 << " - " << l.point2 << ")";
     return os;
@@ -84,12 +84,12 @@ inline ostream& operator<<(ostream& os, const Line& l)
 
 class Polygon: public Shape {
 public:
-    vector<Point2D> points;
-    vector<Line> lines;
+    std::vector<Point2D> points;
+    std::vector<Line> lines;
     bool closed;
     
     Polygon(): Polygon{{}, false} {}
-    Polygon(vector<Point2D> p_points, bool p_closed=true): closed{p_closed} {
+    Polygon(std::vector<Point2D> p_points, bool p_closed=true): closed{p_closed} {
         for(auto const& p: p_points) {
             add_point(p);
         }
@@ -117,7 +117,7 @@ public:
     }
 };
 
-inline ostream& operator<<(ostream& os, const Polygon& p)
+inline std::ostream& operator<<(std::ostream& os, const Polygon& p)
 {
     os << "Polygon(";
     for(auto const& p: p.points) {
@@ -145,7 +145,7 @@ public:
     }
 };
 
-inline ostream& operator<<(ostream& os, const Circle& c)
+inline std::ostream& operator<<(std::ostream& os, const Circle& c)
 {
     os << "Circle(" << c.center << ", " << c.radius << ")";
     return os;
@@ -174,10 +174,10 @@ public:
         return pow(radius, 2.0) * M_PI * abs(stop_angle - start_angle) / 360.0;
     }
     
-    vector<Point2D> interpolated_points(int npoints=100) const {
+	std::vector<Point2D> interpolated_points(int npoints=100) const {
         double angle;
         Point2D p;
-        vector<Point2D> points;
+		std::vector<Point2D> points;
         double delta_angle = stop_angle - start_angle;
         for(int i=0; i<npoints; i++) {
             angle = start_angle + i * delta_angle / (npoints-1);
@@ -221,8 +221,8 @@ public:
         return sizey;
     }
     
-    vector<Point2D> get_points() const {
-        vector<Point2D> points;
+	std::vector<Point2D> get_points() const {
+		std::vector<Point2D> points;
         points.push_back(point1);
         points.push_back(Point2D(point2.x, point1.y));
         points.push_back(point2);
@@ -232,7 +232,7 @@ public:
 };
 
 
-inline ostream& operator<<(ostream& os, const Rectangle& r)
+inline std::ostream& operator<<(std::ostream& os, const Rectangle& r)
 {
     os << "Rectangle(" << r.point1 << ", " << r.point2 << ")";
     return os;

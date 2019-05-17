@@ -6,13 +6,13 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#include <stdio.h>
+#include <iostream>
 #include <exception>
-#include <math.h>
+#include <cmath>
 #include <vector>
-#include "Point2D.h"
-#include "Shapes.h"
-#include "catch.hpp"
+#include "../StarMap/Geometry/Point2D.h"
+#include "../StarMap/Geometry/Shapes.h"
+#include "./catch.hpp"
 
 
 TEST_CASE("Line") {
@@ -51,7 +51,7 @@ TEST_CASE("Polygon") {
     REQUIRE(p1.points.size() == 4);
     REQUIRE(p1.lines.size() == 4);
     
-    vector<Point2D> points;
+	std::vector<Point2D> points;
     points.push_back(Point2D(0,0));
     points.push_back(Point2D(1,0));
     points.push_back(Point2D(0,1));
@@ -77,7 +77,7 @@ TEST_CASE("Circle") {
 
 TEST_CASE("Arc") {
     Arc a = Arc(Point2D(40,23), 45, 0, 90);
-    vector<Point2D> p = a.interpolated_points();
+	std::vector<Point2D> p = a.interpolated_points();
     REQUIRE(a.area() == Approx(45*45*M_PI_4));
     REQUIRE(a.start_point == Point2D(85, 23));
     REQUIRE(a.stop_point == Point2D(40, 68));
@@ -90,7 +90,7 @@ TEST_CASE("Arc") {
 
 TEST_CASE("Rectangle") {
     Rectangle r1 = Rectangle();
-    vector<Point2D> pp = r1.get_points();
+	std::vector<Point2D> pp = r1.get_points();
     REQUIRE(pp.size() == 4);
     REQUIRE(r1.get_sizex() == Approx(1.0));
     REQUIRE(r1.get_sizey() == Approx(1.0));

@@ -9,7 +9,6 @@
 #ifndef TikzPicture_h
 #define TikzPicture_h
 
-#define _USE_MATH_DEFINES
 #include <sstream>
 #include <string>
 #include "../Geometry/Point2D.h"
@@ -34,12 +33,12 @@ private:
     bool boxed;
     bool opened;
     
-    string color;
+	std::string color;
     double linewidth;
     bool dotted;
     bool dashed;
     
-    ofstream *texfile;
+	std::ofstream *texfile;
     
 public:
     /**
@@ -117,7 +116,7 @@ public:
      *
      *   @param  p_texfile is a reference to the texfile that can be used for writing.
      */
-    void set_texfile(ofstream &p_texfile) {
+    void set_texfile(std::ofstream &p_texfile) {
         if(opened) {
             throw "Cannot set texfile when TikzPicture is already opened";
         }
@@ -129,7 +128,7 @@ public:
      *
      *   @return a pointer to the texfile ofstream
      */
-    ofstream *get_texfile() const {
+	std::ofstream *get_texfile() const {
         return texfile;
     }
     
@@ -138,7 +137,7 @@ public:
      *
      *   @return a vector of Point2D instances representing the bounding box of the picture
      */
-    vector<Point2D> get_bounding_box_path() const {
+	std::vector<Point2D> get_bounding_box_path() const {
         return bounding_box.get_points();
     }
     
@@ -152,7 +151,7 @@ public:
             return;
         }
         
-        ostringstream shift;
+		std::ostringstream shift;
         if(origin != Point2D(0, 0)) {
             shift << "{([shift={" << point2coordinates(origin) << "}]current page.south west)}";
         }
@@ -160,8 +159,8 @@ public:
             shift << "{(current page.south west)}";
         }
         
-        cout << "Open TikzPicture" << endl;
-        *texfile << "\\begin{tikzpicture}[remember picture, overlay, shift=" << shift.str() << ", every node/.style={inner sep=0mm, outer sep=0mm, minimum size=0mm, text height=\\normaltextheight, text depth=\\normaltextdepth}]" << endl;
+		std::cout << "Open TikzPicture" << std::endl;
+        *texfile << "\\begin{tikzpicture}[remember picture, overlay, shift=" << shift.str() << ", every node/.style={inner sep=0mm, outer sep=0mm, minimum size=0mm, text height=\\normaltextheight, text depth=\\normaltextdepth}]" << std::endl;
         opened = true;
         
         if(boxed) {
@@ -175,8 +174,8 @@ public:
     
     void close() {
         if(opened) {
-            cout << "Close TikzPicture" << endl;
-            *texfile << "\\end{tikzpicture}" << endl << endl;
+			std::cout << "Close TikzPicture" << std::endl;
+            *texfile << "\\end{tikzpicture}" << std::endl << std::endl;
             texfile = NULL;
         }
     }
@@ -188,7 +187,7 @@ public:
      *
      *   @param  p_color is a color name
      */
-    void set_color(string p_color) {
+    void set_color(std::string p_color) {
         color = p_color;
     }
     
@@ -262,8 +261,8 @@ public:
      *
      *   @return a string containing all the active draw options
      */
-    string draw_options() {
-        ostringstream options;
+	std::string draw_options() {
+		std::ostringstream options;
         options << "[";
         options << "line width=" << linewidth << "pt,";
         options << color;
@@ -288,7 +287,7 @@ public:
      */
     void draw_line(const Line l) {
         open();
-        *texfile << "\\draw " << draw_options() << " " << point2coordinates(l.point1) << "--" << point2coordinates(l.point2) << ";" << endl;
+        *texfile << "\\draw " << draw_options() << " " << point2coordinates(l.point1) << "--" << point2coordinates(l.point2) << ";" << std::endl;
     }
     
     /**
@@ -297,9 +296,9 @@ public:
      *   @param  points is a vector of Point2D instances that indicate the path to be drawn
      *   @param  cycle indicates whether to close the path
      */
-    void draw_path(const vector<Point2D> points, bool cycle=false) {
+    void draw_path(const std::vector<Point2D> points, bool cycle=false) {
         open();
-        *texfile << "\\draw " << draw_options() << " " << points2path(points, cycle) << ";" << endl;
+        *texfile << "\\draw " << draw_options() << " " << points2path(points, cycle) << ";" << std::endl;
     }
     
     /**
@@ -318,7 +317,7 @@ public:
      */
     void draw_rectangle(const Rectangle r) {
         open();
-        *texfile << "\\draw " << draw_options() << " " << point2coordinates(r.point1) << " rectangle " << point2coordinates(r.point2) << ";" << endl;
+        *texfile << "\\draw " << draw_options() << " " << point2coordinates(r.point1) << " rectangle " << point2coordinates(r.point2) << ";" << std::endl;
     }
     
     /**
@@ -328,7 +327,7 @@ public:
      */
     void fill_rectangle(const Rectangle r) {
         open();
-        *texfile << "\\fill [" << color << "] " << point2coordinates(r.point1) << " rectangle " << point2coordinates(r.point2) << ";" << endl;
+        *texfile << "\\fill [" << color << "] " << point2coordinates(r.point1) << " rectangle " << point2coordinates(r.point2) << ";" << std::endl;
     }
     
     /**
@@ -345,7 +344,7 @@ public:
      */
     void draw_circle(const Circle c) {
         open();
-        *texfile << "\\draw " << draw_options() << point2coordinates(c.center) << " circle (" << c.radius << "mm);" << endl;
+        *texfile << "\\draw " << draw_options() << point2coordinates(c.center) << " circle (" << c.radius << "mm);" << std::endl;
     }
     
     /**
@@ -355,7 +354,7 @@ public:
      */
     void fill_circle(const Circle c) {
         open();
-        *texfile << "\\fill [" << color << "] " << point2coordinates(c.center) << " circle (" << c.radius << "mm);" << endl;
+        *texfile << "\\fill [" << color << "] " << point2coordinates(c.center) << " circle (" << c.radius << "mm);" << std::endl;
     }
     
     /**
@@ -368,7 +367,7 @@ public:
             draw_path(a.interpolated_points());
         }
         *texfile << "\\draw " << draw_options() << " ([shift=(" << a.start_angle << ":" << a.radius << "mm)]" << a.center.x << "mm," << a.center.y << "mm) ";
-        *texfile << "arc (" << a.start_angle << ":" << a.stop_angle << ":" << a.radius << "mm);" << endl;
+        *texfile << "arc (" << a.start_angle << ":" << a.stop_angle << ":" << a.radius << "mm);" << std::endl;
     }
     
     void draw_label() {
@@ -386,7 +385,7 @@ public:
      *   Delineate the scope of the clipping by using braces. Instantiate a TikzClip object
      *   using this method before any other drawing commands.
      */
-    TikzClip clip(vector<Point2D> path) {
+    TikzClip clip(std::vector<Point2D> path) {
         return TikzClip(texfile, path);
     }
 };
