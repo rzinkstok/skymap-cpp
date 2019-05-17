@@ -6,9 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef AzimuthalEquidistantProjection_h
-#define AzimuthalEquidistantProjection_h
-
+#pragma once
 #include "../Geometry/Point2D.h"
 #include "./Projection.h"
 
@@ -48,5 +46,3 @@ public:
     virtual Point2D project(SphericalPoint &) const;
     virtual SphericalPoint backproject(Point2D &) const;
 };
-
-#endif /* AzimuthalEquidistantProjection_h */

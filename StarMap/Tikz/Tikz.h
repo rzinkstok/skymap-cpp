@@ -6,14 +6,12 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef Tikz_h
-#define Tikz_h
-
+#pragma once
 #include <string>
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include <map>
+#include <map> 
 #include "../Geometry/Shapes.h"
 #include "./PaperSize.h"
 #include "./FontSize.h"
@@ -265,5 +263,3 @@ public:
 		std::cout << result << std::endl;
     }
 };
-
-#endif /* Tikz_h */

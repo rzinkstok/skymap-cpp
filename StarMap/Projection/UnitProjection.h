@@ -6,9 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef UnitProjection_h
-#define UnitProjection_h
-
+#pragma once
 #include "../Geometry/Point2D.h"
 #include "./Projection.h"
 
@@ -41,5 +39,3 @@ public:
         return SphericalPoint(p.x, p.y);
     }
 };
-
-#endif /* UnitProjection_h */

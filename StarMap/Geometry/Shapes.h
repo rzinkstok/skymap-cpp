@@ -6,9 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef Shapes_h
-#define Shapes_h
-
+#pragma once
 #include <cmath>
 #include <cstdio>
 #include <vector>
@@ -237,4 +235,3 @@ inline std::ostream& operator<<(std::ostream& os, const Rectangle& r)
     os << "Rectangle(" << r.point1 << ", " << r.point2 << ")";
     return os;
 }
-#endif /* Shapes_h */

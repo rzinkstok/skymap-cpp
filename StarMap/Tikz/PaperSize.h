@@ -6,8 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef PaperSize_h
-#define PaperSize_h
+#pragma once
 #include <string>
 
 // Defines a paper size struct containing width, height (both in mm) and the name of the papersize
@@ -97,6 +96,3 @@ papersize getPaperSize(std::string ps, bool landscape=false) {
             return papersize{};
     }
 }
-
-
-#endif /* PaperSize_h */

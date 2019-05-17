@@ -6,9 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef Point2D_h
-#define Point2D_h
-
+#pragma once
 #include <cmath>
 #include <iostream>
 #include <exception>
@@ -242,6 +240,3 @@ inline std::ostream& operator<<(std::ostream& os, const SphericalPoint& p)
     os << "SphericalPoint(" << p.x << ", " << p.y << ")";
     return os;
 }
-
-
-#endif /* Point2D_h */

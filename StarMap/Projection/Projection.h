@@ -6,9 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef Projection_h
-#define Projection_h
-
+#pragma once
 #include "../Geometry/Point2D.h"
 
 class Projection {
@@ -48,5 +46,3 @@ public:
     
     double reduce_longitude(double) const;
 };
-
-#endif /* Projection_h */

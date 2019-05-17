@@ -6,9 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef EquidistantConicProjection_h
-#define EquidistantConicProjection_h
-
+#pragma once
 #include <cmath>
 #include "../Geometry/Point2D.h"
 #include "./Projection.h"
@@ -61,5 +59,3 @@ public:
     virtual Point2D project(SphericalPoint &) const;
     virtual SphericalPoint backproject(Point2D &) const;
 };
-
-#endif /* EquidistantConicProjection_h */

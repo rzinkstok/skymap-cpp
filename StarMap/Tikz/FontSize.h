@@ -6,8 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef FontSize_h
-#define FontSize_h
+#pragma once
 #include <cmath>
 #include <string>
 #include <vector>
@@ -37,5 +36,3 @@ std::map<std::string, int> getFontSize(double normalsize=11) {
     }
     return result;
 }
-
-#endif /* FontSize_h */

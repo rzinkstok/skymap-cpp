@@ -6,9 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef TikzPicture_h
-#define TikzPicture_h
-
+#pragma once
 #include <sstream>
 #include <string>
 #include "../Geometry/Point2D.h"
@@ -389,5 +387,3 @@ public:
         return TikzClip(texfile, path);
     }
 };
-
-#endif /* TikzPicture_h */

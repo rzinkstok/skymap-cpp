@@ -6,9 +6,7 @@
 //  Copyright © 2018 Roel Zinkstok. All rights reserved.
 //
 
-#ifndef TikzUtils_h
-#define TikzUtils_h
-
+#pragma once
 #include <cmath>
 #include <string>
 #include <vector>
@@ -92,5 +90,3 @@ public:
         *texfile << "\\end{scope}" << std::endl;
     }
 };
-
-#endif /* TikzUtils_h */
